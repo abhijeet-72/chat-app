@@ -24,7 +24,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 // IMPORTANT: Replace the URL below with your actual Vercel frontend URL.
 // Do NOT include a trailing slash (e.g., /)
 const allowedOrigins = [
-  "https://your-vercel-frontend-name.vercel.app", // <-- YOUR VERCEL DOMAIN HERE
+  "https://chat-app-pied-pi.vercel.app", // <-- YOUR VERCEL DOMAIN HERE
   // Add other origins if needed, e.g., for local development:
   "http://localhost:5173",
 ];
