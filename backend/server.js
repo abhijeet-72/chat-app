@@ -20,9 +20,27 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
+// 💡 1. Define the allowed origin(s)
+// IMPORTANT: Replace the URL below with your actual Vercel frontend URL.
+// Do NOT include a trailing slash (e.g., /)
+const allowedOrigins = [
+  "https://your-vercel-frontend-name.vercel.app", // <-- YOUR VERCEL DOMAIN HERE
+  // Add other origins if needed, e.g., for local development:
+  "http://localhost:5173",
+];
+
 // --- 2. CONFIGURE CORS OPTIONS ---
 const corsOptions = {
-  origin: [FRONTEND_URL, "http://localhost:5173"], // Allow both production and local dev
+  origin: (origin, callback) => {
+    // Check if the request origin is in the allowed list OR if the origin is undefined
+    // (undefined origin usually means a same-origin request or a request from a file)
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true); // Allow the request
+    } else {
+      // Deny the request and provide an error message
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // This is essential for sending cookies (like our JWT)
   optionsSuccessStatus: 204,
