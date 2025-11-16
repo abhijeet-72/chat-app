@@ -21,7 +21,13 @@ const useLeaveGroup = () => {
 
     setLoading(true);
     try {
-      await axios.put(`/api/conversations/leave/${selectedConversation._id}`);
+      await axios.put(
+        `/api/conversations/leave/${selectedConversation._id}`,
+        null,
+        { withCredentials: true }
+      );
+      // This route is protected and needs credentials.
+      // For axios.put without a data body, we pass null as the second argument so the config (third argument) is read correctly.
 
       // 1. Remove from sidebar
       removeConversation(selectedConversation._id);

@@ -15,7 +15,9 @@ const useDeleteMessage = () => {
     setLoading(true);
     try {
       // 1. Call the API to delete from DB
-      await axios.delete(`/api/messages/${messageId}`);
+      await axios.delete(`/api/messages/${messageId}`, {
+        withCredentials: true,
+      });
 
       // 2. Remove from Zustand store
       deleteMessageFromStore(messageId);

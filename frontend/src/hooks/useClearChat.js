@@ -20,7 +20,9 @@ const useClearChat = () => {
 
     setLoading(true);
     try {
-      await axios.delete(`/api/messages/clear/${selectedConversation._id}`);
+      await axios.delete(`/api/messages/clear/${selectedConversation._id}`, {
+        withCredentials: true,
+      });
 
       // 1. Clear messages from the store
       setMessages([]);

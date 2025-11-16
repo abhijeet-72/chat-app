@@ -8,10 +8,14 @@ const useChangePassword = () => {
   const changePassword = async ({ oldPassword, newPassword }) => {
     setLoading(true);
     try {
-      await axios.put("/api/users/password", {
-        oldPassword,
-        newPassword,
-      });
+      await axios.put(
+        "/api/users/password",
+        {
+          oldPassword,
+          newPassword,
+        },
+        { withCredentials: true }
+      );
 
       toast.success("Password changed successfully!");
       return true; // Indicate success

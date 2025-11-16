@@ -17,10 +17,14 @@ const useCreateGroup = () => {
     setLoading(true);
     try {
       // 2. Call the API
-      const res = await axios.post("/api/conversations/group", {
-        groupName,
-        participants, // This is an array of user IDs
-      });
+      const res = await axios.post(
+        "/api/conversations/group",
+        {
+          groupName,
+          participants,
+        }, // This is an array of user IDs
+        { withCredentials: true }
+      );
 
       const newGroup = res.data;
 

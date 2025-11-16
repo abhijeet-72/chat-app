@@ -19,7 +19,8 @@ const useGetMessages = () => {
         //   `/api/messages/${selectedConversation._id}`
         // );
         const res = await axios.get(
-          `/api/messages/convo/${selectedConversation._id}`
+          `/api/messages/convo/${selectedConversation._id}`,
+          { withCredentials: true }
         );
         // 1. Set messages in the Zustand store
         setMessages(res.data);

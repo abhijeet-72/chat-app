@@ -20,11 +20,15 @@ const useSignup = () => {
     setLoading(true);
     try {
       // 2. API Call (using the proxy)
-      const res = await axios.post("/api/auth/signup", {
-        username,
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "/api/auth/signup",
+        {
+          username,
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       const data = res.data;
 

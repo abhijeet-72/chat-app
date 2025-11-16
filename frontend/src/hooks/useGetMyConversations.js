@@ -22,7 +22,9 @@ const useGetMyConversations = () => {
     const getMyConversations = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("/api/conversations");
+        const res = await axios.get("/api/conversations", {
+          withCredentials: true,
+        });
         setConversations(res.data);
       } catch (error) {
         toast.error(error.response?.data?.error || "An error occurred.");

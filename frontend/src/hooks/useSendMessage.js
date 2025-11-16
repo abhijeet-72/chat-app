@@ -19,7 +19,8 @@ const useSendMessage = () => {
         {
           message: messageContent,
           messageType: "text",
-        }
+        },
+        { withCredentials: true }
       );
 
       const newMessage = res.data;

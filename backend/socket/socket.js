@@ -20,7 +20,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 const io = new Server(server, {
   cors: {
-    origin: [FRONTEND_URL, "http://localhost:5173", "*"], // <<< --- 1. MATCH THE SERVER
+    origin: [FRONTEND_URL, "http://localhost:5173"], // <<< --- 1. MATCH THE SERVER
     methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE"],
     credentials: true, // <<< --- 2. ADD CREDENTIALS
   },

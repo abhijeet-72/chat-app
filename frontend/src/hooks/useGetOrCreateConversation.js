@@ -11,7 +11,16 @@ const useGetOrCreateConversation = () => {
     setLoading(true);
     try {
       // Call our new backend route
-      const res = await axios.post(`/api/conversations/find/${userId}`);
+      const res = await axios.post(
+        `/api/conversations/find/${userId}`,
+        null, // <<< --- ADD 'null' for the data argument
+        { withCredentials: true }
+      );
+
+      // For axios.post, the third argument is config.
+      // Since route doesn't need a request body, passed null as the second argument.
+      // So withCredentials is correctly read as the third.
+
       const conversation = res.data;
 
       // Set this as the active conversation

@@ -15,10 +15,14 @@ const useLogin = () => {
     setLoading(true);
     try {
       // 2. API Call
-      const res = await axios.post("/api/auth/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "/api/auth/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
 
       const data = res.data;
 

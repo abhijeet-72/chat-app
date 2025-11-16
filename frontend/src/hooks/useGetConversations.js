@@ -12,7 +12,10 @@ const useGetConversations = () => {
       try {
         // Our 'protectRoute' middleware will get the user ID
         // and the controller will exclude that user.
-        const res = await axios.get("/api/users");
+
+        // --- THIS IS THE FIX ---
+        const res = await axios.get("/api/users", { withCredentials: true });
+
         setConversations(res.data);
       } catch (error) {
         const errorMessage =

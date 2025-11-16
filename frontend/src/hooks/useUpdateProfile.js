@@ -23,6 +23,7 @@ const useUpdateProfile = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
 
       // Update the user in our auth store
