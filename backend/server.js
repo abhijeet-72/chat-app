@@ -23,7 +23,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 // --- 2. CONFIGURE CORS OPTIONS ---
 const corsOptions = {
   origin: [FRONTEND_URL, "http://localhost:5173"], // Allow both production and local dev
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // This is essential for sending cookies (like our JWT)
+  optionsSuccessStatus: 204,
 };
 
 // --- Middleware ---

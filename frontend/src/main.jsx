@@ -8,7 +8,7 @@ import axios from "axios";
 import { SocketProvider } from "./context/SocketContext.jsx";
 
 // --- SETTING THE LIVE BACKEND URL ---
-axios.defaults.baseURL = "https://flux-chat-app-backup.onrender.com";
+axios.defaults.baseURL = "https://flux-app-lovy.onrender.com";
 // axios.defaults.baseURL =
 //   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 axios.defaults.withCredentials = true; // To send/receive cookies
