@@ -19,7 +19,7 @@ export const SocketProvider = ({ children }) => {
     if (authUser) {
       // Connect to the backend socket server
       // const newSocket = io("http://localhost:5000", {
-      const newSocket = io("https://flux-chat-app-backup.onrender.com", {
+      const newSocket = io("https://flux-app-lovy.onrender.com", {
         // Send the userId to the server for mapping
         query: {
           userId: authUser._id,
