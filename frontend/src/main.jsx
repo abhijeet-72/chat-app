@@ -14,9 +14,9 @@ axios.defaults.baseURL = "https://flux-app-lovy.onrender.com";
 axios.defaults.withCredentials = true; // To send/receive cookies
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <SocketProvider>
-      <App />
-    </SocketProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <SocketProvider>
+    <App />
+  </SocketProvider>
+  //</React.StrictMode>
 );
