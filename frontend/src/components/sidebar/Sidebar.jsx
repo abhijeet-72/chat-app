@@ -31,7 +31,10 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col h-full border-r border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md">
+      {/* --- THIS IS THE UPDATED LINE ---
+        'rounded-lg' and 'shadow-md' are now 'md:rounded-lg' and 'md:shadow-md'
+      */}
+      <div className="flex flex-col h-full border-r border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 md:rounded-lg md:shadow-md">
         {/* ... (SearchInput, Divider, New Group Button) ... */}
         <SearchInput />
         <div className="my-4 border-t border-gray-300 dark:border-gray-600"></div>
