@@ -18,7 +18,7 @@ const Conversation = ({ conversation }) => {
 
   if (conversation.isGroupChat) {
     chatName = conversation.groupName;
-    chatPic = "/default-group.png"; // <<< --- Use a default group icon
+    chatPic = "/default-group.png"; // Use a default group icon
   } else {
     // It's a 1-on-1 chat
     const otherParticipant = conversation.participants.find(
@@ -26,7 +26,6 @@ const Conversation = ({ conversation }) => {
     );
     chatName = otherParticipant?.username || "User";
 
-    // <<< --- USE PROFILE PIC --- >>>
     if (otherParticipant?.profilePic) {
       chatPic = otherParticipant.profilePic;
     }
@@ -75,36 +74,6 @@ const Conversation = ({ conversation }) => {
     </div>
   );
 };
-
-/**
- * The list of all *actual* conversations (1-on-1 and group).
- */
-// const Conversations = () => {
-//   // (This part remains the same)
-//   const { loading, conversations } = useGetMyConversations();
-
-//   return (
-//     <div className="flex flex-col gap-2">
-//       {!loading &&
-//         conversations.length > 0 &&
-//         conversations.map((convo) => (
-//           <Conversation key={convo._id} conversation={convo} />
-//         ))}
-
-//       {loading && (
-//         <div className="flex justify-center items-center h-full">
-//           <div className="w-6 h-6 border-2 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
-//         </div>
-//       )}
-
-//       {!loading && conversations.length === 0 && (
-//         <p className="text-center text-gray-500 dark:text-gray-400">
-//           No conversations. Start one by searching!
-//         </p>
-//       )}
-//     </div>
-//   );
-// };
 
 /**
  * The list of all *actual* conversations (1-on-1 and group).

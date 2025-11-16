@@ -4,6 +4,7 @@ import useAuthStore from "../store/authStore";
 import useUpdateProfile from "../hooks/useUpdateProfile";
 import useChangePassword from "../hooks/useChangePassword";
 import useTheme from "../hooks/useTheme";
+import defAvatar from "../../public/default-avatar.png";
 
 // Back Arrow Icon
 const BackIcon = () => (
@@ -95,7 +96,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center">
             <div className="relative">
               <img
-                src={profilePicPreview}
+                src={profilePicPreview || defAvatar}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-300 dark:border-gray-600"
               />
