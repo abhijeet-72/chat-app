@@ -45,8 +45,8 @@ const useGetMyConversations = () => {
     };
 
     const handleNewMessage = (newMessage) => {
-      // Update the last message and re-sort
       setConversations((prev) => {
+        // Map through conversations to find the one to update
         const updatedConversations = prev.map((convo) => {
           if (convo._id === newMessage.conversationId) {
             return {
@@ -59,15 +59,22 @@ const useGetMyConversations = () => {
                 sender: newMessage.senderId,
                 sentAt: newMessage.createdAt,
               },
+              // Optional: update unread count if you have that logic
             };
           }
           return convo;
         });
-        updatedConversations.sort(
-          (a, b) =>
-            new Date(b.lastMessage.sentAt) - new Date(a.lastMessage.sentAt)
-        );
-        return updatedConversations;
+
+        // Sort: Move the updated conversation to the top
+        return updatedConversations.sort((a, b) => {
+          const dateA = a.lastMessage
+            ? new Date(a.lastMessage.sentAt)
+            : new Date(0);
+          const dateB = b.lastMessage
+            ? new Date(b.lastMessage.sentAt)
+            : new Date(0);
+          return dateB - dateA;
+        });
       });
     };
 

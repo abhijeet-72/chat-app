@@ -10,17 +10,25 @@ const useConversationStore = create((set) => ({
 
   setMessages: (messages) => set({ messages: messages }),
 
+  // Modify addMessage to check for duplicates by ID
   addMessage: (message) =>
-    set((state) => ({
-      messages: [...state.messages, message],
-    })),
+    set((state) => {
+      // 1. Let's check if message already exists
+      const exists = state.messages.some((msg) => msg._id === message._id);
+
+      // 2. If it exists, return current state (do nothing)
+      if (exists) return state;
+
+      // 3. If not, add it
+      return { messages: [...state.messages, message] };
+    }),
 
   deleteMessage: (messageId) =>
     set((state) => ({
       messages: state.messages.filter((msg) => msg._id !== messageId),
     })),
 
-  // --- THIS IS THE FIX ---
+  // --- FIX ---
   /**
    * Sets the entire list of conversations (for the sidebar)
    * Can accept a new array or an updater function (prevState => newState)

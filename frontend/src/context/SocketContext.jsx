@@ -24,6 +24,8 @@ export const SocketProvider = ({ children }) => {
         query: {
           userId: authUser._id,
         },
+        transports: ["websocket"], // <<< --- Added To Force stable connection
+        withCredentials: true,
       });
 
       setSocket(newSocket);
