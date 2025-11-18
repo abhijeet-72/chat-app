@@ -7,7 +7,6 @@ import CreateGroupModal from "./CreateGroupModal";
 import useAuthStore from "../../store/authStore";
 import useTheme from "../../hooks/useTheme";
 
-// (NewGroupIcon component remains the same)
 const NewGroupIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +21,6 @@ const NewGroupIcon = () => (
     />
   </svg>
 );
-// (ProfileIcon is no longer needed, we'll use the user's avatar)
 
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -31,50 +29,46 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* --- THIS IS THE UPDATED LINE ---
-        'rounded-lg' and 'shadow-md' are now 'md:rounded-lg' and 'md:shadow-md'
-      */}
-      <div className="flex flex-col h-full border-r border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 md:rounded-lg md:shadow-md">
-        {/* ... (SearchInput, Divider, New Group Button) ... */}
-        <SearchInput />
-        <div className="my-4 border-t border-gray-300 dark:border-gray-600"></div>
-        <button
-          className="flex items-center justify-center gap-2 w-full p-2 mb-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700"
-          onClick={() => setShowModal(true)}
-        >
-          <NewGroupIcon />
-          <span>New Group Chat</span>
-        </button>
+      {/* LAYOUT FIX: Removed rounded/shadow. Added w-full. */}
+      <div className="flex flex-col h-full w-full border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        {/* Top Section with Padding */}
+        <div className="p-4">
+          <SearchInput />
+          <div className="my-4 border-t border-gray-300 dark:border-gray-600"></div>
+          <button
+            className="flex items-center justify-center gap-2 w-full p-2 mb-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors"
+            onClick={() => setShowModal(true)}
+          >
+            <NewGroupIcon />
+            <span>New Group Chat</span>
+          </button>
+        </div>
 
-        {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto">
+        {/* Conversations (Scrollable) */}
+        <div className="flex-1 overflow-y-auto px-2">
           <Conversations />
         </div>
 
-        {/* --- BOTTOM BUTTONS (UPDATED) --- */}
-        {/* <div className="mt-4 flex items-center justify-between gap-2"> */}
-        <div className="mt-4 flex items-center gap-2">
-          {/* Profile Button (Avatar) */}
+        {/* Bottom Section with Padding */}
+        <div className="p-4 mt-auto border-t border-gray-200 dark:border-gray-700 flex items-center gap-2">
           <Link
             to="/profile"
-            className="w-10 h-10 rounded-full overflow-hidden shrink-0"
+            className="w-10 h-10 rounded-full overflow-hidden shrink-0 hover:opacity-80 transition-opacity"
             title="Go to Profile"
           >
             <img
-              src={authUser.profilePic || "/default-avatar.png"} // Use a fallback
+              src={authUser.profilePic || "/default-avatar.png"}
               alt="Your Profile"
               className="w-full h-full object-cover"
             />
           </Link>
 
-          {/* Logout Button (Takes up space) */}
           <div className="flex-1">
             <LogoutButton />
           </div>
 
-          {/* --- 3. ADD THEME TOGGLE --- */}
           <button
-            className="p-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-2xl"
+            className="p-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-2xl transition-colors"
             onClick={toggleTheme}
             title="Toggle theme"
           >
@@ -83,7 +77,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Render the modal conditionally */}
       {showModal && <CreateGroupModal onClose={() => setShowModal(false)} />}
     </>
   );

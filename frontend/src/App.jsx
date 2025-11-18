@@ -22,44 +22,35 @@ function App() {
   return (
     <Router>
       {/* LAYOUT FIX: 
-          1. 'h-screen w-full': Forces the app to fill the entire viewport.
-          2. 'overflow-hidden': Prevents the main window from scrolling (scroll bars will be inside the chat list/window instead).
+         Removed 'h-screen' and 'overflow-hidden'. 
+         We use 'min-h-screen' to ensure full background coverage, 
+         but let individual pages (like ChatPage) handle their own locking.
       */}
-      <div className="h-screen w-full flex bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-all duration-300">
-        {/* Toast notifications stay at the top level */}
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Toaster />
 
-        {/* Inner container to hold the pages */}
-        <div className="flex w-full h-full overflow-hidden">
-          <Routes>
-            {/* Landing Page Route */}
-            <Route
-              path="/"
-              element={!authUser ? <LandingPage /> : <Navigate to="/chat" />}
-            />
-
-            {/* Auth Routes */}
-            <Route
-              path="/login"
-              element={!authUser ? <LoginPage /> : <Navigate to="/chat" />}
-            />
-            <Route
-              path="/signup"
-              element={!authUser ? <SignupPage /> : <Navigate to="/chat" />}
-            />
-
-            {/* Protected Chat Route */}
-            <Route
-              path="/chat"
-              element={authUser ? <ChatPage /> : <Navigate to="/login" />}
-            />
-
-            <Route
-              path="/profile"
-              element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-            />
-          </Routes>
-        </div>
+        <Routes>
+          <Route
+            path="/"
+            element={!authUser ? <LandingPage /> : <Navigate to="/chat" />}
+          />
+          <Route
+            path="/login"
+            element={!authUser ? <LoginPage /> : <Navigate to="/chat" />}
+          />
+          <Route
+            path="/signup"
+            element={!authUser ? <SignupPage /> : <Navigate to="/chat" />}
+          />
+          <Route
+            path="/chat"
+            element={authUser ? <ChatPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/profile"
+            element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+          />
+        </Routes>
       </div>
     </Router>
   );

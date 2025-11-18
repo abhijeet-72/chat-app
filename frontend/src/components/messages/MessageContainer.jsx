@@ -4,7 +4,6 @@ import useConversationStore from "../../store/conversationStore";
 import { useSocketContext } from "../../context/SocketContext";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
-
 import useLeaveGroup from "../../hooks/useLeaveGroup";
 import useClearChat from "../../hooks/useClearChat";
 
@@ -51,8 +50,6 @@ const ClearIcon = () => (
     />
   </svg>
 );
-
-// --- BACK ICON ---
 const BackIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -112,10 +109,11 @@ const FluxLogo = () => (
     </defs>
   </svg>
 );
+
 const NoChatSelected = () => {
   const { authUser } = useAuthStore();
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full">
+    <div className="flex flex-col items-center justify-center h-full w-full bg-white dark:bg-gray-800">
       <FluxLogo />
       <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-200 mt-6">
         Welcome, {authUser?.username}!
@@ -126,9 +124,7 @@ const NoChatSelected = () => {
     </div>
   );
 };
-// --- End of placeholder components ---
 
-// Main Component
 const MessageContainer = () => {
   const {
     selectedConversation,
@@ -136,7 +132,7 @@ const MessageContainer = () => {
     addMessage,
     setMessages,
     deleteMessage,
-    setSelectedConversation, // <<< --- 2. GET SETTER FROM STORE
+    setSelectedConversation,
   } = useConversationStore();
 
   const { socket } = useSocketContext();
@@ -146,10 +142,8 @@ const MessageContainer = () => {
   const { loading: leaveLoading, leaveGroup } = useLeaveGroup();
   const { loading: clearLoading, clearChat } = useClearChat();
 
-  // --- Socket.IO Event Listeners ---
   useEffect(() => {
     if (socket) {
-      // Listen for new messages
       socket.on("newMessage", (newMessage) => {
         if (selectedConversation?._id === newMessage.conversationId) {
           addMessage(newMessage);
@@ -160,9 +154,34 @@ const MessageContainer = () => {
           }
         }
       });
-      // ... (rest of listeners: typing, messagesRead, messageDeleted)
+      socket.on("typing", () => setIsTyping(true));
+      socket.on("stopTyping", () => setIsTyping(false));
+      socket.on("messagesRead", ({ conversationId, readByUserId }) => {
+        setMessages(
+          messages.map((msg) => {
+            if (
+              msg.conversationId === conversationId &&
+              !msg.readBy.includes(readByUserId)
+            ) {
+              return { ...msg, readBy: [...msg.readBy, readByUserId] };
+            }
+            return msg;
+          })
+        );
+      });
+      socket.on("messageDeleted", ({ messageId }) => {
+        deleteMessage(messageId);
+      });
     }
-    // ... (rest of dependencies)
+    return () => {
+      if (socket) {
+        socket.off("newMessage");
+        socket.off("typing");
+        socket.off("stopTyping");
+        socket.off("messagesRead");
+        socket.off("messageDeleted");
+      }
+    };
   }, [
     socket,
     addMessage,
@@ -172,7 +191,6 @@ const MessageContainer = () => {
     deleteMessage,
   ]);
 
-  // --- Emit "mark as read" ---
   useEffect(() => {
     if (socket && selectedConversation?._id) {
       if (!selectedConversation.isGroupChat) {
@@ -189,7 +207,6 @@ const MessageContainer = () => {
     setIsTyping(false);
   }, [selectedConversation, socket]);
 
-  // --- GET CHAT PARTNER (FOR 1-ON-1) ---
   const getChatPartner = () => {
     if (!selectedConversation || selectedConversation.isGroupChat) return null;
     const authUser = useAuthStore.getState().authUser;
@@ -200,7 +217,6 @@ const MessageContainer = () => {
 
   const chatPartner = getChatPartner();
 
-  // --- Determine Header Name and Pic ---
   const chatName = selectedConversation?.isGroupChat
     ? selectedConversation.groupName
     : chatPartner?.username;
@@ -210,15 +226,13 @@ const MessageContainer = () => {
     : chatPartner?.profilePic || "/default-avatar.png";
 
   return (
-    // 3. Add responsive rounding/shadow (full-screen on mobile, card on desktop)
-    <div className="flex flex-col h-full bg-white dark:bg-gray-800 md:rounded-lg md:shadow-md">
+    // LAYOUT FIX: Removed rounded/shadow. Added w-full.
+    <div className="flex flex-col h-full w-full bg-white dark:bg-gray-800">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
         <>
-          {/* --- HEADER (UPDATED) --- */}
-          <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
-            {/* --- 4. MOBILE-ONLY BACK BUTTON --- */}
+          <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <button
               className="p-1 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full md:hidden"
               onClick={() => setSelectedConversation(null)}
@@ -226,7 +240,6 @@ const MessageContainer = () => {
               <BackIcon />
             </button>
 
-            {/* Avatar */}
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
               <img
                 src={chatPic}
@@ -235,7 +248,6 @@ const MessageContainer = () => {
               />
             </div>
 
-            {/* Name/Typing */}
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-800 dark:text-gray-200 truncate">
                 {chatName}
@@ -247,7 +259,6 @@ const MessageContainer = () => {
               )}
             </div>
 
-            {/* SETTINGS MENU */}
             <div className="relative">
               <button
                 className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
@@ -256,11 +267,9 @@ const MessageContainer = () => {
                 <SettingsIcon />
               </button>
 
-              {/* Dropdown Menu */}
               {showMenu && (
                 <div className="absolute right-0 top-10 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg border dark:border-gray-700 z-50">
                   {selectedConversation.isGroupChat ? (
-                    // Group Menu
                     <button
                       className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                       onClick={leaveGroup}
@@ -270,7 +279,6 @@ const MessageContainer = () => {
                       {leaveLoading ? "Leaving..." : "Leave Group"}
                     </button>
                   ) : (
-                    // 1-on-1 Menu
                     <button
                       className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                       onClick={clearChat}
@@ -280,16 +288,12 @@ const MessageContainer = () => {
                       {clearLoading ? "Clearing..." : "Clear Chat"}
                     </button>
                   )}
-                  {/* We could add "Add Members" here later */}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Messages */}
           <Messages />
-
-          {/* Input */}
           <MessageInput />
         </>
       )}

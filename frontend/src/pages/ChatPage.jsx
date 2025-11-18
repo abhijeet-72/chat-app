@@ -3,30 +3,32 @@ import MessageContainer from "../components/messages/MessageContainer";
 import useConversationStore from "../store/conversationStore";
 
 const ChatPage = () => {
-  // 1. Get the selected conversation from the store
   const { selectedConversation } = useConversationStore();
 
   return (
-    // 2. Remove padding on mobile (p-0) and keep it on desktop (md:p-4)
-    <div className="flex h-screen w-full p-0 md:p-4 md:gap-4">
-      {/* 3. Sidebar Logic:
-        - Show on desktop (md:flex)
-        - On mobile, show by default (flex), but HIDE if a chat is selected (selectedConversation ? "hidden" : "flex")
+    // LAYOUT FIX: Removed padding and gaps. Added bg color to prevent white flashes.
+    <div className="flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
+      {/* Sidebar Logic:
+         - W-full on mobile
+         - Fixed width (w-80 to w-96) on desktop
+         - Hidden on mobile if chat is selected
       */}
       <div
-        className={`w-full md:w-[30%] md:max-w-md ${
-          selectedConversation ? "hidden" : "flex"
-        } md:flex`}
+        className={`w-full md:w-80 lg:w-96 flex-shrink-0 h-full ${
+          selectedConversation ? "hidden md:flex" : "flex"
+        }`}
       >
         <Sidebar />
       </div>
 
-      {/* 4. Message Container Logic:
-        - Show on desktop (md:flex)
-        - On mobile, HIDE by default (hidden), but SHOW if a chat is selected (selectedConversation ? "flex" : "hidden")
+      {/* Message Container Logic:
+         - Takes remaining space (flex-1)
+         - Hidden on mobile if NO chat is selected
       */}
       <div
-        className={`flex-1 ${selectedConversation ? "flex" : "hidden"} md:flex`}
+        className={`flex-1 h-full ${
+          selectedConversation ? "flex" : "hidden md:flex"
+        }`}
       >
         <MessageContainer />
       </div>
